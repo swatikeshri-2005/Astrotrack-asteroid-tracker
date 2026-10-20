@@ -1,0 +1,250 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#080b16" />
+  <meta name="description" content="Explore near-Earth asteroids with NASA data, close approach distances, speed and estimated size." />
+  <title>AstroTrack | Near-Earth Asteroid Explorer</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="stars" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a class="brand" href="#">
+      <span class="brand-icon">✦</span>
+      <span>ASTRO<span class="accent">TRACK</span></span>
+    </a>
+    <div class="topbar-right">
+      <span class="live-dot"></span>
+      <span id="connection-status">Connecting to NASA...</span>
+      <button id="refresh-button" class="refresh-button" type="button">
+        ↻ Refresh
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow"><span></span> NEAR-EARTH OBJECT MONITOR</div>
+        <h1>Watch the rocks<br />that <span>cross our orbit.</span></h1>
+        <p>
+          Explore asteroids approaching Earth, examine their trajectories,
+          and discover the science behind our cosmic neighbors.
+        </p>
+        <div class="hero-meta">
+          <span>◉ NASA NeoWs data</span>
+          <span>◷ <span id="updated-time">Awaiting data</span></span>
+        </div>
+      </div>
+      <div class="orbit-art" aria-label="Illustration of an asteroid orbiting Earth">
+        <div class="orbit orbit-one"></div>
+        <div class="orbit orbit-two"></div>
+        <div class="orbit orbit-three"></div>
+        <div class="sun"></div>
+        <div class="earth">🌎</div>
+        <div class="asteroid-art">☄</div>
+        <div class="orbit-label label-earth">EARTH</div>
+        <div class="orbit-label label-neo">NEO</div>
+      </div>
+    </section>
+
+    <section class="stats-grid" aria-label="Asteroid statistics">
+      <article class="stat-card">
+        <div class="stat-top">
+          <span class="stat-icon purple">✧</span>
+          <span class="stat-label">OBJECTS TRACKED</span>
+        </div>
+        <div class="stat-value" id="total-count">—</div>
+        <div class="stat-note">In the selected date range</div>
+      </article>
+      <article class="stat-card">
+        <div class="stat-top">
+          <span class="stat-icon red">⚠</span>
+          <span class="stat-label">POTENTIALLY HAZARDOUS</span>
+        </div>
+        <div class="stat-value" id="hazard-count">—</div>
+        <div class="stat-note">NASA hazard classification</div>
+      </article>
+      <article class="stat-card">
+        <div class="stat-top">
+          <span class="stat-icon blue">↗</span>
+          <span class="stat-label">CLOSEST APPROACH</span>
+        </div>
+        <div class="stat-value compact" id="closest-distance">—</div>
+        <div class="stat-note" id="closest-name">Waiting for asteroid data</div>
+      </article>
+      <article class="stat-card">
+        <div class="stat-top">
+          <span class="stat-icon green">◉</span>
+          <span class="stat-label">FASTEST OBJECT</span>
+        </div>
+        <div class="stat-value compact" id="fastest-speed">—</div>
+        <div class="stat-note" id="fastest-name">Waiting for asteroid data</div>
+      </article>
+    </section>
+
+    <section class="section-heading">
+      <div>
+        <div class="eyebrow">MISSION CONTROL</div>
+        <h2>Asteroid <span>intelligence</span></h2>
+      </div>
+      <div class="range-control">
+        <label for="date-range">Approach window</label>
+        <select id="date-range">
+          <option value="1">Today</option>
+          <option value="3">Next 3 days</option>
+          <option value="7" selected>Next 7 days</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="content-grid">
+      <article class="panel chart-panel">
+        <div class="panel-heading">
+          <div>
+            <h3>Close approach radar</h3>
+            <p>Nearest objects by distance from Earth</p>
+          </div>
+          <span class="mini-tag">TOP 6</span>
+        </div>
+        <div id="distance-chart" class="distance-chart">
+          <div class="loading">Loading approach data...</div>
+        </div>
+        <div class="chart-legend">
+          <span class="legend-dot"></span> Distance in lunar distances
+        </div>
+      </article>
+
+      <article class="panel insight-panel">
+        <div class="panel-heading">
+          <div>
+            <h3>Mission insights</h3>
+            <p>A snapshot of the selected window</p>
+          </div>
+          <span class="insight-symbol">✧</span>
+        </div>
+        <div class="insight-item">
+          <span class="insight-icon">◉</span>
+          <div>
+            <strong id="insight-nearest-title">Nearest approach</strong>
+            <p id="insight-nearest">Analyzing asteroid distances...</p>
+          </div>
+        </div>
+        <div class="insight-item">
+          <span class="insight-icon warning">⚠</span>
+          <div>
+            <strong>Hazard assessment</strong>
+            <p id="insight-hazard">Checking NASA classifications...</p>
+          </div>
+        </div>
+        <div class="insight-item">
+          <span class="insight-icon blue">↗</span>
+          <div>
+            <strong>Velocity record</strong>
+            <p id="insight-speed">Comparing relative velocities...</p>
+          </div>
+        </div>
+        <div class="disclaimer">
+          <strong>Science note</strong>
+          <p>
+            "Potentially hazardous" is a scientific classification, not a
+            prediction that an asteroid will hit Earth.
+          </p>
+        </div>
+      </article>
+    </section>
+
+    <section class="list-section">
+      <div class="section-heading list-title">
+        <div>
+          <div class="eyebrow">OBJECT CATALOG</div>
+          <h2>Incoming <span>objects</span></h2>
+          <p class="section-subtitle">Explore the near-Earth object feed.</p>
+        </div>
+        <button id="export-button" class="secondary-button" type="button">
+          ↓ Export CSV
+        </button>
+      </div>
+
+      <div class="toolbar">
+        <label class="search-box">
+          <span>⌕</span>
+          <input
+            id="search-input"
+            type="search"
+            placeholder="Search asteroid name or ID..."
+            autocomplete="off"
+          />
+        </label>
+        <select id="hazard-filter" aria-label="Filter by hazard status">
+          <option value="all">All objects</option>
+          <option value="hazardous">Potentially hazardous</option>
+          <option value="safe">Not classified as hazardous</option>
+        </select>
+        <select id="sort-select" aria-label="Sort asteroids">
+          <option value="distance">Nearest first</option>
+          <option value="speed">Fastest first</option>
+          <option value="size">Largest first</option>
+          <option value="date">Approach date</option>
+          <option value="name">Name A–Z</option>
+        </select>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ASTEROID</th>
+              <th>EST. DIAMETER</th>
+              <th>VELOCITY</th>
+              <th>MISS DISTANCE</th>
+              <th>APPROACH DATE</th>
+              <th>STATUS</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="asteroid-table">
+            <tr>
+              <td colspan="7" class="loading">Receiving data from NASA...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="result-footer" class="result-footer">Loading objects...</div>
+    </section>
+
+    <section class="api-note">
+      <div class="api-note-icon">✧</div>
+      <div>
+        <strong>Data from NASA's Near Earth Object Web Service</strong>
+        <p>
+          Measurements and close-approach predictions are supplied by NASA/JPL.
+          This dashboard is an educational visualization, not an impact-warning system.
+        </p>
+        <a href="https://cneos.jpl.nasa.gov/" target="_blank" rel="noopener noreferrer">
+          Explore NASA/JPL's Center for Near-Earth Object Studies ↗
+        </a>
+      </div>
+    </section>
+
+    <footer>
+      <span>ASTROTRACK <span class="accent">/</span> EARTH'S COSMIC NEIGHBORS</span>
+      <span>Built for exploration · Powered by NASA data</span>
+    </footer>
+  </main>
+
+  <dialog id="asteroid-dialog" class="asteroid-dialog">
+    <div id="dialog-content"></div>
+    <form method="dialog">
+      <button class="secondary-button close-button">Close details</button>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
