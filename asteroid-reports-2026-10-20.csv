@@ -1,0 +1,2 @@
+﻿"id","name","potentially_hazardous","minimum_diameter_m","maximum_diameter_m","velocity_kmh","miss_distance_km","miss_distance_lunar","approach_date","orbiting_body","nasa_jpl_url"
+"3137852","(2002 TA69)","false","520.6609142179","1164.2331974184","83219.2142169586","13378772.786670148","34.7888817803","2026-10-26","Earth","https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html#/?sstr=3137852"

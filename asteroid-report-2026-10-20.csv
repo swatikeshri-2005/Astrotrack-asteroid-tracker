@@ -1,0 +1,2 @@
+﻿"id","name","potentially_hazardous","minimum_diameter_m","maximum_diameter_m","velocity_kmh","miss_distance_km","miss_distance_lunar","approach_date","orbiting_body","nasa_jpl_url"
+"3788085","(2017 UX7)","false","20.1629919443","45.0858206172","37186.4314610608","6500634.160621572","16.9036276284","2026-10-22","Earth","https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html#/?sstr=3788085"
